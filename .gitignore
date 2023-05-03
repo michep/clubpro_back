@@ -1,0 +1,13 @@
+.vscode/
+__pycache__/
+bin/
+lib/
+lib64
+pyvenv.cfg
+share/
+include/
+Scripts/
+
+config.py
+schoosch-8e6d4-firebase-adminsdk-qtszm-4352033692.json
+chepaykin_org/

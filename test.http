@@ -1,0 +1,11 @@
+POST http://127.0.0.1:8083/auth HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "test",
+    "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"
+}
+
+
+GET http://127.0.0.1:8083/user/6450fe088d29d0caa8521886 HTTP/1.1
+Authorization: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODMwNDYxMDYsImlhdCI6MTY4MzAzNTMwNiwibmJmIjoxNjgzMDM1MzA2LCJpZGVudGl0eSI6IjY0NTBmZTA4OGQyOWQwY2FhODUyMTg4NiJ9.5pVOE4eDKQT1dAcpaDs6E2gql4HoVJZbm7LmxzMpDJ8
