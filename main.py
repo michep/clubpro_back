@@ -5,13 +5,14 @@ from datetime import timedelta
 from jsonprovider import MongoJSONProvider
 
 from auth import authenticate, identity, make_payload_handler
+from config import SECRET_KEY
 
 from api.user import bp as userbp
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = '971b8f53-f482-497b-8292-e8d6a5f9663d'
-app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=3)
+app.config['SECRET_KEY'] = SECRET_KEY
+app.config['JWT_EXPIRATION_DELTA'] = timedelta(minutes=3)
 app.json = MongoJSONProvider(app)
 
 CORS(app)
