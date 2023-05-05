@@ -2,11 +2,10 @@ POST http://127.0.0.1:8083/auth
 Content-Type: application/json
 
 {
-    "username": "test",
+    "username": "myphone",
     "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"
 }
 {{
-    console.debug(response.parsedBody)
     exports.TOKEN = response.parsedBody.access_token;
 }}
 
@@ -31,38 +30,34 @@ Authorization: JWT {{TOKEN}}
 Content-Type: application/json
 
 {
-    "login": "login",
     "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
-    "phone": "phone",
     "login": "testtest"
 }
 
 
-PUT http://127.0.0.1:8083/user/sendcode
+PUT http://127.0.0.1:8083/user/6454dd3a93e2f50ba7096c92/sendcode
 Authorization: JWT {{TOKEN}}
 Content-Type: application/json
 
 {
-    "_id": "6453d4dbc5289a44da7be139",
-    "login": "login",
+    "_id": "6454dd3a93e2f50ba7096c92",
     "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
-    "phone": "phone",
     "login": "testtest"
 }
 
 
-PUT http://127.0.0.1:8083/user/checkcode
+PUT http://127.0.0.1:8083/user/6454dd3a93e2f50ba7096c92/checkcode
 Authorization: JWT {{TOKEN}}
 Content-Type: application/json
 
 {
-    "phone": "phone",
-    "smscode": "4556"
+    "login": "testtest",
+    "smscode": "2779"
 }
 
 
 PUT http://127.0.0.1:8083/user/6450fe088d29d0caa8521886
-Authorization: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODMyMTc5NDMsImlhdCI6MTY4MzIxNzc2MywibmJmIjoxNjgzMjE3NzYzLCJpZGVudGl0eSI6IjY0NTBmZTA4OGQyOWQwY2FhODUyMTg4NiJ9.RTtg-TMxlm8Yq2Tks_g3okH5o0Nj9YEKpPhiGR6S-yM
+Authorization: JWT {{TOKEN}}
 Content-Type: application/json
 
 {

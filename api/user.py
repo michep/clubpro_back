@@ -12,7 +12,7 @@ def getUserById(userid: str):
 @bp.route('/login/<login>', methods=['GET'])
 @jwt_required()
 def getUserByLogin(login: str):
-    return jsonify(DBUser.getUserByLogin(login))
+    return jsonify(DBUser.getUserByLogin(login, allattrs=True))
 
 @bp.route('', methods=['PUT'])
 # @jwt_required()
@@ -29,13 +29,13 @@ def updateUser(userid: str):
 def registerUser():
     return jsonify(DBUser.registerUser(request.json))
 
-@bp.route('/sendcode', methods=['PUT'])
+@bp.route('/<userid>/sendcode', methods=['PUT'])
 # @jwt_required()
-def sendCode():
-    return jsonify(DBUser.sendSMS(request.json))
+def sendCode(userid: str):
+    return jsonify(DBUser.sendSMS(userid, request.json))
 
 
-@bp.route('/checkcode', methods=['PUT'])
+@bp.route('/<userid>/checkcode', methods=['PUT'])
 # @jwt_required()
-def checkCode():
-    return jsonify(DBUser.checkSMS(request.json))
+def checkCode(userid: str):
+    return jsonify(DBUser.checkSMS(userid, request.json))
