@@ -1,22 +1,70 @@
-POST http://127.0.0.1:8083/auth HTTP/1.1
+POST http://127.0.0.1:8083/auth
 Content-Type: application/json
 
 {
     "username": "test",
     "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"
 }
+{{
+    console.debug(response.parsedBody)
+    exports.TOKEN = response.parsedBody.access_token;
+}}
+
+###
+GET http://127.0.0.1:8083/user/id/6450fe088d29d0caa8521886
+Authorization: JWT {{TOKEN}}
 
 
-GET http://127.0.0.1:8083/user/id/6450fe088d29d0caa8521886 HTTP/1.1
-Authorization: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODMxODk2NzYsImlhdCI6MTY4MzE4OTY3MywibmJmIjoxNjgzMTg5NjczLCJpZGVudGl0eSI6IjY0NTBmZTA4OGQyOWQwY2FhODUyMTg4NiJ9.bLx_y3LO3YpKggbQmtU5EHWVsb7wOtcxi-WI7x_fCZo
-
-
-PUT http://127.0.0.1:8083/user HTTP/1.1
-Authorization: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODMxMjM4NDMsImlhdCI6MTY4MzExMzA0MywibmJmIjoxNjgzMTEzMDQzLCJpZGVudGl0eSI6IjY0NTBmZTA4OGQyOWQwY2FhODUyMTg4NiJ9.bW6RFf4VbneQsL5u1tQqYFiOAk8gskZBCTftz1x2UbI
+PUT http://127.0.0.1:8083/user
+Authorization: JWT {{TOKEN}}
 Content-Type: application/json
 
 {
     "login": "login",
     "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
     "something": "here"
+}
+
+
+PUT http://127.0.0.1:8083/user/register
+Authorization: JWT {{TOKEN}}
+Content-Type: application/json
+
+{
+    "login": "login",
+    "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+    "phone": "phone",
+    "login": "testtest"
+}
+
+
+PUT http://127.0.0.1:8083/user/sendcode
+Authorization: JWT {{TOKEN}}
+Content-Type: application/json
+
+{
+    "_id": "6453d4dbc5289a44da7be139",
+    "login": "login",
+    "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+    "phone": "phone",
+    "login": "testtest"
+}
+
+
+PUT http://127.0.0.1:8083/user/checkcode
+Authorization: JWT {{TOKEN}}
+Content-Type: application/json
+
+{
+    "phone": "phone",
+    "smscode": "4556"
+}
+
+
+PUT http://127.0.0.1:8083/user/6450fe088d29d0caa8521886
+Authorization: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODMyMTc5NDMsImlhdCI6MTY4MzIxNzc2MywibmJmIjoxNjgzMjE3NzYzLCJpZGVudGl0eSI6IjY0NTBmZTA4OGQyOWQwY2FhODUyMTg4NiJ9.RTtg-TMxlm8Yq2Tks_g3okH5o0Nj9YEKpPhiGR6S-yM
+Content-Type: application/json
+
+{
+    "phone": "this is phone"
 }

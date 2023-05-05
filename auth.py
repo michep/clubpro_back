@@ -4,7 +4,7 @@ from services.dbuser import DBUser
 
 
 def authenticate(username, password):
-    user = DBUser.getUserByLogin(username)
+    user = DBUser.getUserByLogin(username, allattrs=True)
     if user and compare_digest(user['password'].encode('utf-8'), password.encode('utf-8')):
         return user
 

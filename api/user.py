@@ -15,7 +15,27 @@ def getUserByLogin(login: str):
     return jsonify(DBUser.getUserByLogin(login))
 
 @bp.route('', methods=['PUT'])
-@jwt_required()
+# @jwt_required()
 def createUser():
-    data = request.json
-    return jsonify(DBUser.createUser(data))
+    return jsonify(DBUser.createUser(request.json))
+
+@bp.route('/<userid>', methods=['PUT'])
+@jwt_required()
+def updateUser(userid: str):
+    return jsonify(DBUser.updateUser(userid, request.json))
+
+@bp.route('/register', methods=['PUT'])
+# @jwt_required()
+def registerUser():
+    return jsonify(DBUser.registerUser(request.json))
+
+@bp.route('/sendcode', methods=['PUT'])
+# @jwt_required()
+def sendCode():
+    return jsonify(DBUser.sendSMS(request.json))
+
+
+@bp.route('/checkcode', methods=['PUT'])
+# @jwt_required()
+def checkCode():
+    return jsonify(DBUser.checkSMS(request.json))

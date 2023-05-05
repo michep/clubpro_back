@@ -20,8 +20,6 @@ CORS(app)
 jwt = JWT(app, authentication_handler=authenticate, identity_handler=identity)
 jwt.jwt_payload_handler(make_payload_handler(app))
 
-
-
 app.register_blueprint(userbp)
 
 app.run('0.0.0.0', port='8083')
