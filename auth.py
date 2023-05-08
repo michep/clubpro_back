@@ -8,6 +8,7 @@ def authenticate(username, password):
     if user and compare_digest(user['password'].encode('utf-8'), password.encode('utf-8')):
         return user
 
+
 def identity(payload):
     return DBUser.getUserById(payload['identity'])
 
