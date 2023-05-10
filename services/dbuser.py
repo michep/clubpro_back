@@ -1,6 +1,8 @@
+from flask import Flask
 from bson import ObjectId
 from mdb import MDB
 from services.utils import generatecode3
+from services.sms import SMS
 
 class DBUser:
 
@@ -51,6 +53,10 @@ class DBUser:
         code = generatecode3()
         # code = '0000'
         DBUser.updateUser(userid, {'smscode': code}, {'phone_confirmed': 1})
+        smsres = SMS.sendSMS(data['login'], f'CLubPRO ваш код подтверждения {code}')
+        if smsres['status'] == 'ERROR':
+            
+            return {'result': 'error'}
         return {'result': 'sent'}
 
 
