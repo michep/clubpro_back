@@ -3,4 +3,5 @@ pymongo
 flask
 flask-cors
 flask-jwt
+jwt
 requests
