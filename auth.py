@@ -1,6 +1,7 @@
 import datetime
 from hmac import compare_digest
 from services.dbuser import DBUser
+from flask import jsonify
 
 
 def authenticate(username, password):
@@ -23,3 +24,10 @@ def make_payload_handler(current_app):
         return {'exp': exp, 'iat': iat, 'nbf': nbf, 'identity': identity}
     
     return payload
+
+def auth_response_handler(access_token, identity):
+    try:
+        token = access_token.decode('utf-8')
+    except AttributeError:
+        token = access_token
+    return jsonify({'access_token': token})
