@@ -1,4 +1,3 @@
-from flask import Flask
 from bson import ObjectId
 from mdb import MDB
 from services.utils import generatecode3
@@ -43,28 +42,27 @@ class DBUser:
     def updateUser(self, userid: str|ObjectId, setdata: dict, unsetdata: dict = {}) -> dict:
         if type(userid) is str:
             userid = ObjectId(userid)
-        return {'modified_count': MDB.user.update_one({'_id': userid}, {'$set': setdata, '$unset': unsetdata}).modified_count}
+        res = MDB.user.update_one({'_id': userid}, {'$set': setdata, '$unset': unsetdata})
+        return {'modified_count': res.modified_count, 'upserted_id': res.upserted_id}
     
 
     @classmethod
-    def sendSMS(self, userid: str|ObjectId, data: dict) -> dict:
-        if type(userid) is str:
-            userid = ObjectId(userid)
+    def sendSMS(self, data: dict) -> dict:
+        user = DBUser.getUserByLogin(data['login'])
         code = generatecode3()
         # code = '0000'
-        DBUser.updateUser(userid, {'smscode': code}, {'phone_confirmed': 1})
-        smsres = SMS.sendSMS(data['login'], f'CLubPRO ваш код подтверждения {code}')
+        DBUser.updateUser(user['_id'], {'smscode': code}, {'phone_confirmed': 1})
+        # smsres = SMS.sendSMS(data['login'], f'ClubPRO ваш код подтверждения {code}')
+        smsres = {'status': 'OK'}
         if smsres['status'] == 'ERROR':
-            
             return {'result': 'error'}
+
         return {'result': 'sent'}
 
 
     @classmethod
-    def checkSMS(self, userid: str|ObjectId, data: dict) -> dict:
-        if type(userid) is str:
-            userid = ObjectId(userid)
-        user = DBUser.getUserById(userid)
+    def checkSMS(self, data: dict) -> dict:
+        user = DBUser.getUserByLogin(data['login'])
         if 'smscode' in user.keys() and 'smscode' in data.keys() and user['smscode'] == data['smscode']:
             DBUser.updateUser(user['_id'], {'phone_confirmed': True}, {'smscode': 1})
             return {'result': 'ok'}
@@ -79,3 +77,12 @@ class DBUser:
             return {'inserted_id': None, 'error': 'такой номер телефона уже использован'}
 
         return DBUser.createUser(data)
+
+
+    @classmethod
+    def resetpassword(self, data: dict) -> dict:
+        smsres = DBUser.checkSMS(data)
+        if smsres['result'] == 'ok':
+            user = DBUser.getUserByLogin(data['login'])
+            return DBUser.updateUser(user['_id'], {'login': data['login'], 'password': data['password']})
+        return smsres

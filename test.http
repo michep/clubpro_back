@@ -1,16 +1,18 @@
+
 POST http://127.0.0.1:8083/auth
+# POST https://api.clubpro.space/auth
 Content-Type: application/json
 
 {
     "username": "79035972452",
-    "password": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e"
+    "password": "49cbe57e9503aa0c6d0cf1f88ec2b8e1dfb870c346fb9c82bc0489915108d75a"
 }
 {{
     exports.TOKEN = response.parsedBody.access_token;
 }}
 
 ###
-GET http://127.0.0.1:8083/user/id/6450fe088d29d0caa8521886
+GET http://127.0.0.1:8083/user/id/646346ee6f2dab13a781b599
 Authorization: JWT {{TOKEN}}
 
 
@@ -63,3 +65,21 @@ Content-Type: application/json
 {
     "phone": "this is phone"
 }
+
+
+
+PUT http://127.0.0.1:8083/file
+Authorization: JWT {{TOKEN}}
+Content-Type: application/json
+
+{
+    "filename": "this is filename.txt",
+    "data": "IyBzY2hvb3NjaCAoU0NIT09sIFNDSGVkdWxlKQ0KDQpBbiBhbWF6aW5nIGludGVyYWN0aXZlIHNoZWR1bGUgZm9yIHNjaG9vbHMgd2l0aCBsb3RzIG9mIHVzZWZ1bCBmZWF0dXJlcyBmb3IgdGVhY2hlcnMsIHN0dWRlbnRzIGFuZCB0aGVpciBwYXJlbnRzIGFuZCBhIHN0YW5kYWxvbmUgYWRtaW4gdmlldy4NCg0KIyMgR2V0dGluZyBTdGFydGVkDQoNClRoaXMgcHJvamVjdCBpcyBhIHN0YXJ0aW5nIHBvaW50IGZvciBhIEZsdXR0ZXIgYXBwbGljYXRpb24uDQoNCkEgZmV3IHJlc291cmNlcyB0byBnZXQgeW91IHN0YXJ0ZWQgaWYgdGhpcyBpcyB5b3VyIGZpcnN0IEZsdXR0ZXIgcHJvamVjdDoNCg0KLSBbTGFiOiBXcml0ZSB5b3VyIGZpcnN0IEZsdXR0ZXIgYXBwXShodHRwczovL2ZsdXR0ZXIuZGV2L2RvY3MvZ2V0LXN0YXJ0ZWQvY29kZWxhYikNCi0gW0Nvb2tib29rOiBVc2VmdWwgRmx1dHRlciBzYW1wbGVzXShodHRwczovL2ZsdXR0ZXIuZGV2L2RvY3MvY29va2Jvb2spDQoNCkZvciBoZWxwIGdldHRpbmcgc3RhcnRlZCB3aXRoIEZsdXR0ZXIsIHZpZXcgb3VyDQpbb25saW5lIGRvY3VtZW50YXRpb25dKGh0dHBzOi8vZmx1dHRlci5kZXYvZG9jcyksIHdoaWNoIG9mZmVycyB0dXRvcmlhbHMsDQpzYW1wbGVzLCBndWlkYW5jZSBvbiBtb2JpbGUgZGV2ZWxvcG1lbnQsIGFuZCBhIGZ1bGwgQVBJIHJlZmVyZW5jZS4NCg=="
+}
+
+
+GET http://127.0.0.1:8083/file/6464a412c4c63b08fb7916cf
+
+
+DELETE http://127.0.0.1:8083/file/6464a412c4c63b08fb7916cf
+Authorization: JWT {{TOKEN}}

@@ -8,6 +8,7 @@ from auth import authenticate, identity, make_payload_handler, auth_response_han
 from config import SECRET_KEY
 
 from api.user import bp as userbp
+from api.file import bp as filebp
 
 app = Flask(__name__)
 
@@ -22,5 +23,6 @@ jwt.jwt_payload_handler(make_payload_handler(app))
 jwt.auth_response_handler(auth_response_handler)
 
 app.register_blueprint(userbp)
+app.register_blueprint(filebp)
 
 app.run('0.0.0.0', port='8083')

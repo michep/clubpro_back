@@ -33,16 +33,21 @@ def registerUser():
     return jsonify(DBUser.registerUser(request.json))
 
 
-@bp.route('/register/<userid>/sendcode', methods=['PUT'])
-def sendCode(userid: str):
-    return jsonify(DBUser.sendSMS(userid, request.json))
+@bp.route('/sendcode', methods=['PUT'])
+def sendCode():
+    return jsonify(DBUser.sendSMS(request.json))
 
 
-@bp.route('/register/<userid>/checkcode', methods=['PUT'])
-def checkCode(userid: str):
-    return jsonify(DBUser.checkSMS(userid, request.json))
+@bp.route('/checkcode', methods=['PUT'])
+def checkCode():
+    return jsonify(DBUser.checkSMS(request.json))
 
 
 @bp.route('/register/<userid>', methods=['PUT'])
 def registerUser2(userid: str):
     return jsonify(DBUser.updateUser(userid, request.json))
+
+
+@bp.route('/resetpassword', methods=['PUT'])
+def resetpassword():
+    return jsonify(DBUser.resetpassword(request.json))
