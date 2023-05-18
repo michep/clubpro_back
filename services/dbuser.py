@@ -22,10 +22,10 @@ class DBUser:
 
 
     @classmethod
-    def getUserById(self, userid: str|ObjectId, allattrs: bool = False) -> dict|None:
-        if type(userid) is str:
-            userid = ObjectId(userid)
-        return MDB.user.find_one({'_id': userid}, DBUser.projection(allattrs))
+    def getUserById(self, id: str|ObjectId, allattrs: bool = False) -> dict|None:
+        if type(id) is str:
+            id = ObjectId(id)
+        return MDB.user.find_one({'_id': id}, DBUser.projection(allattrs))
 
 
     @classmethod
@@ -39,16 +39,18 @@ class DBUser:
 
 
     @classmethod
-    def updateUser(self, userid: str|ObjectId, setdata: dict, unsetdata: dict = {}) -> dict:
-        if type(userid) is str:
-            userid = ObjectId(userid)
-        res = MDB.user.update_one({'_id': userid}, {'$set': setdata, '$unset': unsetdata})
+    def updateUser(self, id: str|ObjectId, setdata: dict, unsetdata: dict = {}) -> dict:
+        if type(id) is str:
+            id = ObjectId(id)
+        res = MDB.user.update_one({'_id': id}, {'$set': setdata, '$unset': unsetdata})
         return {'modified_count': res.modified_count, 'upserted_id': res.upserted_id}
     
 
     @classmethod
     def sendSMS(self, data: dict) -> dict:
         user = DBUser.getUserByLogin(data['login'])
+        if not user:
+            return {'result': 'error'}
         code = generatecode3()
         # code = '0000'
         DBUser.updateUser(user['_id'], {'smscode': code}, {'phone_confirmed': 1})
@@ -63,6 +65,8 @@ class DBUser:
     @classmethod
     def checkSMS(self, data: dict) -> dict:
         user = DBUser.getUserByLogin(data['login'])
+        if not user:
+            return {'result': 'error'}
         if 'smscode' in user.keys() and 'smscode' in data.keys() and user['smscode'] == data['smscode']:
             DBUser.updateUser(user['_id'], {'phone_confirmed': True}, {'smscode': 1})
             return {'result': 'ok'}

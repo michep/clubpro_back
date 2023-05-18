@@ -4,7 +4,7 @@ from services.dbuser import DBUser
 
 bp = Blueprint('user', __name__, url_prefix='/user')
 
-@bp.route('/id/<userid>', methods=['GET'])
+@bp.route('/<userid>', methods=['GET'])
 @jwt_required()
 def getUserById(userid: str):
     return jsonify(DBUser.getUserById(userid))
@@ -22,7 +22,7 @@ def createUser():
     return jsonify(DBUser.createUser(request.json))
 
 
-@bp.route('/<userid>', methods=['PUT'])
+@bp.route('/<userid>', methods=['POST'])
 @jwt_required()
 def updateUser(userid: str):
     return jsonify(DBUser.updateUser(userid, request.json))
@@ -33,19 +33,19 @@ def registerUser():
     return jsonify(DBUser.registerUser(request.json))
 
 
-@bp.route('/sendcode', methods=['PUT'])
+@bp.route('/register/<userid>', methods=['PUT'])
+def registerUser2(userid: str):
+    return jsonify(DBUser.updateUser(userid, request.json))
+
+
+@bp.route('/sendcode', methods=['POST'])
 def sendCode():
     return jsonify(DBUser.sendSMS(request.json))
 
 
-@bp.route('/checkcode', methods=['PUT'])
+@bp.route('/checkcode', methods=['POST'])
 def checkCode():
     return jsonify(DBUser.checkSMS(request.json))
-
-
-@bp.route('/register/<userid>', methods=['PUT'])
-def registerUser2(userid: str):
-    return jsonify(DBUser.updateUser(userid, request.json))
 
 
 @bp.route('/resetpassword', methods=['PUT'])
