@@ -4,6 +4,7 @@ from services.dbcatalog import DBCatalog
 
 bp = Blueprint('catalog', __name__, url_prefix='/catalog')
 
+
 @bp.route('/<folderid>', methods=['GET'])
 @jwt_required()
 def getFolderById(folderid: str):
@@ -18,7 +19,7 @@ def getSubFolders(folderid: str):
 
 @bp.route('/<folderid>/products/<type>', methods=['GET'])
 @jwt_required()
-def getSubFolders(folderid: str, type: str):
+def getProductsOfType(folderid: str, type: str):
     res = []
     if type == 'all':
         res.append(DBCatalog.getFolderPrimaryProducts(folderid))

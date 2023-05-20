@@ -5,14 +5,14 @@ Content-Type: application/json
 
 {
     "username": "79035972452",
-    "password": "49cbe57e9503aa0c6d0cf1f88ec2b8e1dfb870c346fb9c82bc0489915108d75a"
+    "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"
 }
 {{
     exports.TOKEN = response.parsedBody.access_token;
 }}
 
 ###
-GET http://127.0.0.1:8083/user/id/646346ee6f2dab13a781b599
+GET http://127.0.0.1:8083/user/646611d427cca75dccc2df87
 Authorization: JWT {{TOKEN}}
 
 
@@ -82,4 +82,9 @@ GET http://127.0.0.1:8083/file/6464a412c4c63b08fb7916cf
 
 
 DELETE http://127.0.0.1:8083/file/6464a412c4c63b08fb7916cf
+Authorization: JWT {{TOKEN}}
+
+
+
+GET http://127.0.0.1:8083/catalog/6468ac5918741dc0ef0fd8d1/subfolders
 Authorization: JWT {{TOKEN}}

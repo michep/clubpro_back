@@ -14,65 +14,34 @@ class MongoJSONProvider(DefaultJSONProvider):
             obj = self.__dumpDatetime(obj)
 
         elif type(obj) is list:
-            for i in range(len(obj)):
-                val = obj[i]
-                if self.__isObjectId(val=val):
-                    obj[i] = self.__loadObjectId(val)
+            obj = self.__dumpList(obj)
 
         elif type(obj) is dict:
-            for key in obj.keys():
-                val = obj[key]
-
-                if type(val) is ObjectId:
-                    obj[key] = self.__dumpObjectId(val)
-                    continue
-
-                if type(val) is datetime:
-                    obj[key] = self.__dumpDatetime(val)
+            obj = self.__dumpDict(obj)
 
         return super().dumps(obj, **kwargs)
-    
 
     def loads(self, s: str | bytes, **kwargs: Any) -> Any:
         data = super().loads(s, **kwargs)
 
         if type(data) is dict:
-            for key in data.keys():
-                val = data[key]
-                if self.__isObjectId(val=val, key=key):
-                    data[key] = self.__loadObjectId(val)
-                    continue
-
-                if self.__isObjectIdList(val=val, key=key):
-                    for i in range(len(val)):
-                        vali = data[key][i]
-                        if self.__isObjectId(val=vali):
-                            data[key][i] = self.__loadObjectId(vali)
-                    continue
-
-                if self.__isDatetime(val=val):
-                    data[key] = self.__loadDatetime(val)
+            data = self.__loadDict(data)
 
         elif type(data) is list:
-            for i in range(len(data)):
-                val = data[i]
-                if self.__isObjectId(val=val):
-                    data[i] = self.__loadObjectId(val)
+            data = self.__loadList(data)
 
-        elif self.__isDatetime(val=data):
-            data = self.__loadDatetime(val=data)
+        elif self.__isDatetime(data):
+            data = self.__loadDatetime(data)
 
-        elif self.__isObjectId(val=data):
-            data = self.__loadObjectId(val=data)
+        elif self.__isObjectId(data):
+            data = self.__loadObjectId(data)
 
         return data
 
-
-    def __dumpObjectId(self, val: ObjectId, **kwargs: Any) -> str:
+    def __dumpObjectId(self, val: ObjectId) -> str:
         return str(val)
 
-
-    def __dumpDatetime(self, val: datetime, **kwargs: Any) -> str:
+    def __dumpDatetime(self, val: datetime) -> str:
         if not val.tzinfo:
             val = val.replace(tzinfo=tz_util.utc)
             assert val.tzinfo is not None
@@ -85,22 +54,105 @@ class MongoJSONProvider(DefaultJSONProvider):
         fracsecs = ".%03d" % (millis,) if millis else ""
         return "%s%s%s" % (val.strftime("%Y-%m-%dT%H:%M:%S"), fracsecs, tz_string)
 
+    def __dumpList(self, val: list) -> list:
+        for i in range(len(val)):
+            data = val[i]
 
-    def __isObjectId(self, val: str, key: str|None = None) -> bool:
-        return type(val) is str and len(val) == 24 and (key == None or key.endswith('_id'))
+            if type(data) is ObjectId:
+                val[i] = self.__dumpObjectId(data)
+                continue
 
+            if type(data) is datetime:
+                val[i] = self.__dumpDatetime(data)
+                continue
 
-    def __isObjectIdList(self, val: str, key: str|None = None) -> bool:
-        return type(val) is list and (key == None or key.endswith('_ids'))
-    
+            if type(data) is list:
+                val[i] = self.__dumpList(data)
+                continue
 
-    def __isDatetime(self, val: str, key: str|None = None) -> bool:
-        return type(val) is str and len(val) > 15 and val[4] == '-' and val[7] == '-' and val[13] == ':'
+            if type(data) is dict:
+                val[i] = self.__dumpDict(data)
+
+        return val
+
+    def __dumpDict(self, val: dict) -> dict:
+        for key in val.keys():
+            data = val[key]
+
+            if type(data) is ObjectId:
+                val[key] = self.__dumpObjectId(data)
+                continue
+
+            if type(data) is datetime:
+                val[key] = self.__dumpDatetime(data)
+
+            if type(data) is list:
+                val[key] = self.__dumpList(data)
+                continue
+
+            if type(data) is dict:
+                val[key] = self.__dumpDict(data)
+
+        return val
 
 
     def __loadObjectId(self, val: str) -> ObjectId:
         return ObjectId(val)
-    
+
 
     def __loadDatetime(self, val: str) -> datetime:
         return parser.parse(val)
+
+
+    def __loadList(self, val: list) -> list:
+        for i in range(len(val)):
+            data = val[i]
+
+            if type(data) is dict:
+                val[i] = self.__loadDict(data)
+
+            elif type(data) is list:
+                val[i] = self.__loadList(data)
+
+            elif self.__isDatetime(data):
+                val[i] = self.__loadDatetime(data)
+
+            elif self.__isObjectId(data):
+                val[i] = self.__loadObjectId(data)
+
+        return val
+
+
+    def __loadDict(self, val: dict) -> dict:
+        for key in val.keys():
+            data = val[key]
+        
+            if type(data) is dict:
+                val[key] = self.__loadDict(data)
+
+            elif type(data) is list:
+                val[key] = self.__loadList(data)
+
+            elif self.__isDatetime(data):
+                val[key] = self.__loadDatetime(data)
+
+            elif self.__isObjectId(data):
+                val[key] = self.__loadObjectId(data)
+
+        return val
+
+
+    def __isObjectId(self, val: str) -> bool:
+        return type(val) is str and self.__isHex(val) and len(val) == 24
+
+
+    def __isDatetime(self, val: str) -> bool:
+        return type(val) is str and len(val) > 15 and val[4] == '-' and val[7] == '-' and val[13] == ':'
+
+
+    def __isHex(self, s):
+        try:
+            int(s, 16)
+        except ValueError:
+            return False
+        return len(s) % 2 == 0
