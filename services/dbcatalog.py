@@ -16,7 +16,7 @@ class DBCatalog:
         return MDB.catalog.find_one({'_id': id})
 
     @classmethod
-    def getSubFoldersByParentId(self, id: str | ObjectId) -> dict | None:
+    def getSubFoldersByParentId(self, id: str | ObjectId | None) -> dict | None:
         if type(id) is str:
             id = ObjectId(id)
         return list(MDB.catalog.find({'parentfolder_id': id}))

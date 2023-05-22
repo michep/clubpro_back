@@ -11,6 +11,12 @@ def getFolderById(folderid: str):
     return jsonify(DBCatalog.getFolderById(folderid))
 
 
+@bp.route('/root', methods=['GET'])
+@jwt_required()
+def getRootFolders():
+    return jsonify(DBCatalog.getSubFoldersByParentId(None))
+
+
 @bp.route('/<folderid>/subfolders', methods=['GET'])
 @jwt_required()
 def getSubFolders(folderid: str):
