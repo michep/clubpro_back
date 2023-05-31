@@ -4,6 +4,12 @@ from services.dbuser import DBUser
 
 bp = Blueprint('user', __name__, url_prefix='/user')
 
+@bp.route('', methods=['GET'])
+@jwt_required()
+def getUsersList():
+    return jsonify(DBUser.getManyUsersByFilter(filter={}))
+
+
 @bp.route('/<userid>', methods=['GET'])
 @jwt_required()
 def getUserById(userid: str):

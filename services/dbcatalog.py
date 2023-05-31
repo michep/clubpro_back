@@ -13,13 +13,13 @@ class DBCatalog:
     def getFolderById(self, id: str | ObjectId) -> dict | None:
         if type(id) is str:
             id = ObjectId(id)
-        return MDB.catalog.find_one({'_id': id})
+        return MDB.catalog_extended.find_one({'_id': id})
 
     @classmethod
     def getSubFoldersByParentId(self, id: str | ObjectId | None) -> list:
         if type(id) is str:
             id = ObjectId(id)
-        return list(MDB.catalog.find({'parentfolder_id': id}, sort = [('order', 1)]))
+        return list(MDB.catalog_extended.find({'parentfolder_id': id}, sort = [('order', 1)]))
 
     @classmethod
     def createFolder(self, data: dict) -> dict:
@@ -37,10 +37,10 @@ class DBCatalog:
     def getFolderPrimaryProducts(self, id: str | ObjectId) -> list:
         if type(id) is str:
             id = ObjectId(id)
-        return list(MDB.product.find({'parentfolder_id': id}))
+        return list(MDB.catalog_extended.find({'parentfolder_id': id}))
 
     @classmethod
     def getFolderSecondaryProducts(self, id: str | ObjectId) -> list:
         if type(id) is str:
             id = ObjectId(id)
-        return list(MDB.product.find({'secondaryfolder_ids': id}))
+        return list(MDB.catalog_extended.find({'secondaryfolder_ids': id}))

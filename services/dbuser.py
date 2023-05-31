@@ -18,7 +18,7 @@ class DBUser:
 
     @classmethod
     def getManyUsersByFilter(self, filter: dict, allattrs: bool = False) -> dict|None:
-        return MDB.user.find(filter, DBUser.projection(allattrs))
+        return list(MDB.user.find(filter, DBUser.projection(allattrs)))
 
 
     @classmethod
