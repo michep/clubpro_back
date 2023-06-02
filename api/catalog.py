@@ -28,12 +28,12 @@ def getSubFolders(folderid: str):
 def getProductsOfType(folderid: str, type: str):
     res = []
     if type == 'all':
-        res.append(DBCatalog.getFolderPrimaryProducts(folderid))
-        res.append(DBCatalog.getFolderSecondaryProducts(folderid))
+        res.extend(DBCatalog.getFolderPrimaryProducts(folderid))
+        res.extend(DBCatalog.getFolderSecondaryProducts(folderid))
     elif type == 'primary':
-        res.append(DBCatalog.getFolderPrimaryProducts(folderid))
+        res.extend(DBCatalog.getFolderPrimaryProducts(folderid))
     elif type == 'secondary':
-        res.append(DBCatalog.getFolderSecondaryProducts(folderid))
+        res.extend(DBCatalog.getFolderSecondaryProducts(folderid))
     return jsonify(res)
 
 

@@ -37,10 +37,10 @@ class DBCatalog:
     def getFolderPrimaryProducts(self, id: str | ObjectId) -> list:
         if type(id) is str:
             id = ObjectId(id)
-        return list(MDB.catalog_extended.find({'parentfolder_id': id}))
+        return list(MDB.product.find({'parentfolder_id': id}))
 
     @classmethod
     def getFolderSecondaryProducts(self, id: str | ObjectId) -> list:
         if type(id) is str:
             id = ObjectId(id)
-        return list(MDB.catalog_extended.find({'secondaryfolder_ids': id}))
+        return list(MDB.product.find({'secondaryfolder_ids': id}))

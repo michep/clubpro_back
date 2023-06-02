@@ -10,6 +10,7 @@ from config import SECRET_KEY
 from api.user import bp as userbp
 from api.file import bp as filebp
 from api.catalog import bp as catalogbp
+from api.product import bp as productbp
 
 app = Flask(__name__)
 
@@ -26,5 +27,6 @@ jwt.auth_response_handler(auth_response_handler)
 app.register_blueprint(userbp)
 app.register_blueprint(filebp)
 app.register_blueprint(catalogbp)
+app.register_blueprint(productbp)
 
 app.run('0.0.0.0', port='8083')
